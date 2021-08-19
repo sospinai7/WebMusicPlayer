@@ -16,6 +16,7 @@ function App() {
     <div className="App">
       <Song currentSong={currentSong}/>
       <Player/>
+      <h1>Esto va para afuera.</h1>
     </div>
   );
 }
