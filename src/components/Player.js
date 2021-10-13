@@ -1,7 +1,6 @@
 import React from 'react';
 import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 import { AiFillBackward, AiFillForward } from 'react-icons/ai';
-import Song from './Song';
 
 
 const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, songInfo, songs, setCurrentSong, setSongs}) => {
