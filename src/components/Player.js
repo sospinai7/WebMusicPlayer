@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 import { AiFillBackward, AiFillForward } from 'react-icons/ai';
 import Song from './Song';
-import { playAudio } from '../util';
 
 
 const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, songInfo, songs, setCurrentSong, setSongs}) => {
@@ -45,20 +44,20 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, so
         setSongInfo({...songInfo, currentTime: e.target.value});
     }
 
-    const skipTrackHandler = (direction) => {
+    const skipTrackHandler = async (direction) => {
         let currenIndex = songs.findIndex((song) => song.id === currentSong.id);
         if(direction === 'skip-forward') {
-            setCurrentSong(songs[(currenIndex + 1) % songs.length]);
+        await    setCurrentSong(songs[(currenIndex + 1) % songs.length]);
         }
         if(direction === 'skip-back'){
             if((currenIndex - 1) % songs.length === -1){
-                setCurrentSong(songs[songs.length - 1]);
-                playAudio(isPlaying, audioRef);
+                await setCurrentSong(songs[songs.length - 1]);
+                if(isPlaying) audioRef.current.play();
                 return;
             }
-            setCurrentSong(songs[(currenIndex - 1) % songs.length]);
+            await setCurrentSong(songs[(currenIndex - 1) % songs.length]);
         }
-        playAudio(isPlaying, audioRef);
+        if(isPlaying) audioRef.current.play();
     }
 
     //Add the styles
