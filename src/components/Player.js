@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 import { AiFillBackward, AiFillForward } from 'react-icons/ai';
 import Song from './Song';
 
 
 const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, songInfo, songs, setCurrentSong, setSongs}) => {
-    //Use effect
-    useEffect(() => {
+    const activeLibraryHandler = (nextPrev) => {
         const newSongs = songs.map((song) => {
-            if(song.id === currentSong.id){
+            if(song.id === nextPrev.id){
                 return{
                     ...song,
                     active:true,
@@ -21,7 +20,7 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, so
             }
         });
         setSongs(newSongs);
-    }, [currentSong]);
+    }
     //Event Handlres
     const playSongHandler = () => {
         if(isPlaying){
@@ -47,15 +46,18 @@ const Player = ({audioRef, currentSong, isPlaying, setIsPlaying, setSongInfo, so
     const skipTrackHandler = async (direction) => {
         let currenIndex = songs.findIndex((song) => song.id === currentSong.id);
         if(direction === 'skip-forward') {
-        await    setCurrentSong(songs[(currenIndex + 1) % songs.length]);
+            await    setCurrentSong(songs[(currenIndex + 1) % songs.length]);
+            activeLibraryHandler(songs[(currenIndex + 1) % songs.length]);
         }
         if(direction === 'skip-back'){
             if((currenIndex - 1) % songs.length === -1){
                 await setCurrentSong(songs[songs.length - 1]);
+                activeLibraryHandler(songs[songs.length - 1]);
                 if(isPlaying) audioRef.current.play();
                 return;
             }
             await setCurrentSong(songs[(currenIndex - 1) % songs.length]);
+            activeLibraryHandler(songs[(currenIndex - 1) % songs.length]);
         }
         if(isPlaying) audioRef.current.play();
     }
